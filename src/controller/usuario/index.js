@@ -23,5 +23,10 @@ module.exports = {
         await dao.criptografarSenha(user.id, hash);
 
         return res.status(200).json({ message: 'sucesso', data: user });
+    },
+
+    async store (req, res) {
+        const {nome, email} = req.body;
+        return res.status(200).json({ message: 'sucesso', data: {nome, email} });
     }
 };

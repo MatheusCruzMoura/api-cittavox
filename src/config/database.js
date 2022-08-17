@@ -5,10 +5,10 @@ async function connect() {
         connectionString: process.env.POSTGRES_CONECTIONS
     });
     
-    const client = await pool.connect();
+    // const client = await pool.connect();
 
-    const res = await client.query('select now()');
-    console.log(res.rows[0]);
+    // const res = await client.query('select now()');
+    // console.log(res.rows[0]);
 
     return pool.connect();
 };
