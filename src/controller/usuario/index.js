@@ -1,6 +1,5 @@
-const dao = require('../../dao/usuarioDao.js')
+const dao = require('../../dao/usuarioDao.js');
 const bcrypt = require('bcryptjs');
-const { use } = require('passport');
 
 module.exports = {
     async index(req, res) {
@@ -13,9 +12,9 @@ module.exports = {
         const user = await dao.findUserById(req.params.id);
         console.log(user);
         console.log(req.params);
-        
+
         if (!user) return res.status(400).json({ message: 'não foi encontrado usurarios' });
-        
+
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(user.senha, salt);
         console.log(hash);
@@ -25,8 +24,30 @@ module.exports = {
         return res.status(200).json({ message: 'sucesso', data: user });
     },
 
-    async store (req, res) {
-        const {nome, email} = req.body;
-        return res.status(200).json({ message: 'sucesso', data: {nome, email} });
+    async store(req, res) {
+        const { nome, email, dataNascimento, senha } = req.body;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(senha, salt);
+
+        console.log({ nome, email, dataNascimento, hash });
+        await dao.salvarUser(nome, email, dataNascimento, hash);
+        return res.status(200).json({ message: 'sucesso, usuario cadastrado' });
+
+    },
+
+    async nomeUser(req, res) {
+        const user = await dao.getUserName(req.params.id);
+        if (!user) return res.status(400).json({ message: 'não foi encontrado usurario' });
+        return res.status(200).json(user);
+    },
+
+    async login(req, res) {
+        const { email, senha } = req.body;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(senha, salt);
+        const user = await dao.loginUser(email, hash);
+
+        if (!users) return res.status(400).json({ message: 'Senha ou email inválidos!' });
+        return res.status(200).json({ message: 'sucesso', data: user });
     }
 };

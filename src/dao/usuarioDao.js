@@ -31,5 +31,33 @@ module.exports = {
         if (res.rows.length > 0)
             return res.rows[0];
         else return null;
-    }
+    },
+    
+    async salvarUser(nome, email, dataNascimento, senha) {
+        const conn = await connect();
+        const res = await conn.query(`INSERT INTO usuario (nome, email, senha, data_nascimento) VALUES ($1, $2, $3, $4)`, [nome, email, senha, dataNascimento]);
+        conn.end().then(() => console.log('pool has ended'));
+        if (res.rows.length > 0)
+            return res.rows[0];
+        else return null;
+    },
+
+    async getUserName(id) {
+        const conn = await connect();
+        const res = await conn.query('select nome from usuario WHERE id=$1 LIMIT 1', [id]);
+        conn.end().then(() => console.log('pool has ended'));
+        if (res.rows.length > 0)
+            return res.rows[0];
+        else return null;
+    },
+
+    async loginUser(email, senha) {
+        const conn = await connect();
+        const res = await conn.query(`SELECT id FROM usuario WHERE email=$1 AND senha=$2 LIMIT 1`, [email, senha]);
+        conn.end().then(() => console.log('pool has ended'));
+
+        if (res.rows.length > 0)
+            return res.rows[0];
+        else return null;
+    },
 }
