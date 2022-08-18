@@ -41,13 +41,12 @@ module.exports = {
         return res.status(200).json(user);
     },
 
-    async login(req, res) {
-        const { email, senha } = req.body;
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(senha, salt);
-        const user = await dao.loginUser(email, hash);
+    // async login(req, res) {
+        
 
-        if (!users) return res.status(400).json({ message: 'Senha ou email inválidos!' });
-        return res.status(200).json({ message: 'sucesso', data: user });
-    }
+        // const user = await dao.loginUser(email, hash);
+
+        // if (!users) return res.status(400).json({ message: 'Senha ou email inválidos!' });
+        // return res.status(200).json({ message: 'sucesso', data: user });
+    // }
 };
